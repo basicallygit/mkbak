@@ -9,6 +9,7 @@ fn main() {
         return;
     }
 
+    println!("");
     let force: bool; //force overwrite of already existing .bak files
     let startindex: usize;
     let mut endindex: usize = args.len();
@@ -30,10 +31,10 @@ fn main() {
     for file in &args[startindex..endindex] {
         match make_bak(file, force) {
             Ok(_) => println!("[mkbak] {} -> {}.bak", file, file),
-            Err(e) => println!("{}: {}", file, e),
+            Err(e) => println!("[error] {}: {}", file, e),
         }
     }
-
+    println!("");
 }
 
 fn make_bak(file: &str, force: bool) -> Result<(), std::io::Error> {
@@ -44,7 +45,7 @@ fn make_bak(file: &str, force: bool) -> Result<(), std::io::Error> {
         if !force { //if force is not enabled log error, else continue to overwrite
             return Err(std::io::Error::new(
                 std::io::ErrorKind::AlreadyExists,
-                format!(" {}: File exists, skipping... (use -f to force)", bak)
+                "Backup file already exists (-f to overwrite)",
             ));
         }
     }
